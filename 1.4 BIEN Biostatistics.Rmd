@@ -169,8 +169,8 @@ class(DBHa)
 
 
 ```{r}
-boxplot(DBHn)
-hist(DBHn)
+boxplot(DBHa)
+hist(DBHa)
 ```
 
 
@@ -246,7 +246,89 @@ summaryBy(WPH~scrubbed_species_binomial, data=Breadfruit_WPH_small, FUN=c(mean, 
 ```
 
 ## Exercises for completing the portfolio 
-Do you think the difference in whole plant height is statistically significant between Artocarpus hirsutus and Artocarpus integer?
+
+Exersize 1: Mapping 
+
+Mapping Solanum pimpinellifolium, wild relative of the tomato! 
+
+```{r} 
+Solanum_pimpinellifolium <- BIEN_occurrence_species(species = "Solanum pimpinellifolium", cultivated = F, only.new.world = F, all.taxonomy = T, native.status = T, observation.type = T, political.boundaries = T)
+str(Solanum_pimpinellifolium)
+head(Solanum_pimpinellifolium)
+tail(Solanum_pimpinellifolium)
+```
+
+```{r} 
+Solanum_pimpinellifolium_rangemap <- BIEN_ranges_load_species("Solanum pimpinellifolium")
+```
+
+```{r}
+map('world', fill=T, col="grey", bg="light blue")
+plot(Solanum_pimpinellifolium_rangemap, col="green", add=T)
+points(cbind(Solanum_pimpinellifolium$longitude, Solanum_pimpinellifolium$latitude), col="blue", pch=20, cex=1)
+```
+
+Mapping Passiflora edulis, the passion fruit! 
+
+```{r} 
+Passiflora_edulis <- BIEN_occurrence_species(species = "Passiflora edulis", cultivated = F, only.new.world = F, all.taxonomy = T, native.status = T, observation.type = T, political.boundaries = T)
+str(Passiflora_edulis)
+head(Passiflora_edulis)
+tail(Passiflora_edulis)
+```
+
+```{r} 
+Passiflora_edulis_rangemap <- BIEN_ranges_load_species("Passiflora edulis")
+```
+
+```{r}
+map('world', fill=T, col="grey", bg="light blue")
+plot(Passiflora_edulis_rangemap, col="green", add=T)
+points(cbind(Passiflora_edulis$longitude, Passiflora_edulis$latitude), col="blue", pch=20, cex=1)
+```
+
+
+Exersize 2: Examining trait data 
+Artocarpus hirsutus and Artocarpus maingayi
+
+```{r}
+Hirsutus_Height <- BIEN_trait_traitbyspecies(trait = "whole plant height", species = "Artocarpus hirsutus")
+head(Hirsutus_Height)
+tail(Hirsutus_Height)
+str(Hirsutus_Height)
+```
+
+```{r}
+Maingayi_Height <- BIEN_trait_traitbyspecies(trait = "whole plant height", species = "Artocarpus heterophyllus")
+head(Maingayi_Height)
+tail(Maingayi_Height)
+str(Maingayi_Height)
+```
+
+```{r}
+
+```
+
+```{r} 
+Both_Height <-rbind(Hirsutus_Height, Maingayi_Height)
+head(Both_Height)
+tail(Both_Height)
+class(Both_Height$trait_value)
+Both_Height$trait_value <- as.numeric(Both_Height$trait_value)
+class(Both_Height$trait_value)
+```
+
+```{r}
+ttest_result = t.test(trait_value~scrubbed_species_binomial, Both_Height, paired=F)
+ttest_result
+```
+
+
+```{r}
+boxplot(trait_value~scrubbed_species_binomial, data=Both_Height)
+```
+
+
 
 Can you combine what was learned in the previous lesson "Introduction to getting, testing and plotting data"? 
 
@@ -290,8 +372,6 @@ BIEN_metadata_list_political_names()
 ```
 
 
-
-
 ```{r}
 Cuba<-BIEN_list_country(country = "Cuba")
 head(Cuba)
@@ -325,3 +405,22 @@ tail(OrangeCal_list)
 Before our next digital lab on Feb 22, choose one of the exercises above and complete it. 
 
 Also use this last coding exercise to obtain species lists for three counties in a state in the USA outside of New York. For example, you could start with the county where you attended high school. Or, you could use a county where you have vacationed in the past, or where you would like to visit. Also download data for two adjacent counties. 
+
+```{r}
+Hawaii_List<-BIEN_list_county(country = "United States", state="Hawaii", county="Hawaii")
+head(Hawaii_List)
+tail(Hawaii_List)
+```
+
+```{r}
+Kalawao_List<-BIEN_list_county(country = "United States", state="Hawaii", county="Kalawao")
+head(Kalawao_List)
+tail(Kalawao_List)
+```
+
+```{r}
+Honolulu_List<-BIEN_list_county(country = "United States", state="Hawaii", county="Honolulu")
+head(Honolulu_List)
+tail(Honolulu_List)
+```
+
